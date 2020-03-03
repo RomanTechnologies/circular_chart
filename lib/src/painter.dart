@@ -6,16 +6,18 @@ import 'package:flutter_circular_chart/src/circular_chart.dart';
 import 'package:flutter_circular_chart/src/stack.dart';
 
 class AnimatedCircularChartPainter extends CustomPainter {
-  AnimatedCircularChartPainter(this.animation, this.labelPainter)
+  AnimatedCircularChartPainter(
+      this.animation, this.labelPainter, this.strokeWidth)
       : super(repaint: animation);
 
   final Animation<CircularChart> animation;
   final TextPainter labelPainter;
+  final double strokeWidth;
 
   @override
   void paint(Canvas canvas, Size size) {
     _paintLabel(canvas, size, labelPainter);
-    _paintChart(canvas, size, animation.value);
+    _paintChart(canvas, size, animation.value, strokeWidth: strokeWidth);
   }
 
   @override
@@ -52,7 +54,8 @@ void _paintLabel(Canvas canvas, Size size, TextPainter labelPainter) {
   }
 }
 
-void _paintChart(Canvas canvas, Size size, CircularChart chart) {
+void _paintChart(Canvas canvas, Size size, CircularChart chart,
+    {double strokeWidth = 0}) {
   final Paint segmentPaint = new Paint()
     ..style = chart.chartType == CircularChartType.Radial
         ? PaintingStyle.stroke
@@ -64,7 +67,7 @@ void _paintChart(Canvas canvas, Size size, CircularChart chart) {
   for (final CircularChartStack stack in chart.stacks) {
     for (final segment in stack.segments) {
       segmentPaint.color = segment.color;
-      segmentPaint.strokeWidth = stack.width;
+      segmentPaint.strokeWidth = strokeWidth == 0 ? stack.width : strokeWidth;
 
       canvas.drawArc(
         new Rect.fromCircle(

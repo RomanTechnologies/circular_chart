@@ -36,8 +36,11 @@ class AnimatedCircularChart extends StatefulWidget {
     this.holeLabel,
     this.labelStyle,
     this.edgeStyle = SegmentEdgeStyle.flat,
+    this.strokeWidth,
   })  : assert(size != null),
         super(key: key);
+
+  final double strokeWidth;
 
   /// The size of the bounding box this chart will be constrained to.
   final Size size;
@@ -260,6 +263,7 @@ class AnimatedCircularChartState extends State<AnimatedCircularChart>
       painter: new AnimatedCircularChartPainter(
         _tween.animate(_animation),
         widget.holeLabel != null ? _labelPainter : null,
+        widget.strokeWidth,
       ),
     );
   }
