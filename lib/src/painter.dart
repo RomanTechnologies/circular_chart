@@ -69,6 +69,8 @@ void _paintChart(Canvas canvas, Size size, CircularChart chart,
       segmentPaint.color = stack.segments[i].color;
       segmentPaint.strokeWidth = strokeWidth == 0 ? stack.width : strokeWidth;
 
+      print('Index: $i - Sweep Angle: ${stack.segments[i].sweepAngle}');
+
       canvas.drawArc(
         new Rect.fromCircle(
           center: new Offset(size.width / 2, size.height / 2),
@@ -80,9 +82,25 @@ void _paintChart(Canvas canvas, Size size, CircularChart chart,
         segmentPaint,
       );
 
+      // Get index
+      int index =
+          stack.segments.indexWhere((segment) => segment.sweepAngle > 1);
+
+      print(index);
+
       if (i == stack.segments.length - 1) {
-        canvas.drawCircle(Offset(size.width / 2, size.height / 2), stack.radius,
-            segmentPaint);
+        segmentPaint.color = stack.segments[index].color;
+
+        canvas.drawArc(
+          new Rect.fromCircle(
+            center: new Offset(size.width / 2, size.height / 2),
+            radius: stack.radius,
+          ),
+          stack.startAngle * _kRadiansPerDegree,
+          0.1 * _kRadiansPerDegree,
+          chart.chartType == CircularChartType.Pie,
+          segmentPaint,
+        );
       }
     }
   }
